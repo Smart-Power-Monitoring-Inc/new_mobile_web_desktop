@@ -15,6 +15,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (!Responsive.isDesktop(context))
           IconButton(
@@ -29,18 +30,21 @@ class Header extends StatelessWidget {
                   return Container();
                 }
                 int? page = snapshot.data;
-                return Text(
-                  page == 0
-                      ? "Dashboard"
-                      : page == 1
-                          ? "Manage Devices"
-                          : "Settings",
-                  style: Theme.of(context).textTheme.headline6,
+                return Expanded(
+                  flex: 2,
+                  child: Text(
+                    page == 0
+                        ? "Dashboard"
+                        : page == 1
+                            ? "Manage Devices"
+                            : "Settings",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 );
               }),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        Expanded(child: SearchField()),
+        // Expanded(child: SearchField()),
         ProfileCard()
       ],
     );
@@ -97,8 +101,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     ),
                     if (!Responsive.isMobile(context))
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding / 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text("Angelina Jolie"),
                       ),
                   ],

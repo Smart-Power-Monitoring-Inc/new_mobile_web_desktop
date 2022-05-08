@@ -130,7 +130,8 @@ class _AuthenticationState extends State<Authentication> {
                       ),
                       ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/');
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                               primary: white,
