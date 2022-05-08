@@ -1,4 +1,4 @@
-import 'package:admin/controllers/MenuController.dart';
+import 'package:admin/controllers/PageController.dart';
 import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,13 +19,25 @@ class Header extends StatelessWidget {
         if (!Responsive.isDesktop(context))
           IconButton(
             icon: Icon(Icons.menu),
-            onPressed: context.read<MenuController>().controlMenu,
+            onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         if (!Responsive.isMobile(context))
-          Text(
-            "Dashboard",
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          FutureBuilder<int?>(
+              future: Provider.of<MyPageController>(context).page,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Container();
+                }
+                int? page = snapshot.data;
+                return Text(
+                  page == 0
+                      ? "Dashboard"
+                      : page == 1
+                          ? "Manage Devices"
+                          : "Settings",
+                  style: Theme.of(context).textTheme.headline6,
+                );
+              }),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         Expanded(child: SearchField()),
