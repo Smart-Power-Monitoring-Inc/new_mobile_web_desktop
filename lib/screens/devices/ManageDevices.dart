@@ -2,6 +2,7 @@ import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/components/header.dart';
 import 'package:admin/screens/devices/DeviceDetails.dart';
+import 'package:admin/screens/devices/DeviceList.dart';
 import 'package:flutter/material.dart';
 
 class ManageDevicesScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class ManageDevicesScreen extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      Container(),
+                      DeviceList(),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context)) DeviceDetails(),

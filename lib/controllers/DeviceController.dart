@@ -3,7 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+List<Device> _deviceList = [];
+
 class DeviceController with ChangeNotifier {
+  get returnDeviceList {
+    return [..._deviceList];
+  }
+
   Future<List> get getDeviceData async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -22,6 +28,32 @@ class DeviceController with ChangeNotifier {
     } else {
       return [false];
     }
+  }
+
+  Future<Device> getSelectdDevice(int index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? selectedDeviceString = prefs.getString("selectedDevice") ?? "{}";
+    Map<String, dynamic> selectedDeviceMap = jsonDecode(selectedDeviceString);
+    return Device(
+        name: selectedDeviceMap['name'],
+        uid: selectedDeviceMap['uid'],
+        currentrating: selectedDeviceMap['currentrating'],
+        readings: selectedDeviceMap['readings'],
+        dateAdded: selectedDeviceMap['dateAdded']);
+  }
+
+  Future<void> selectDevice(int index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Device selectedDevice = _deviceList[index];
+    Map<String, dynamic> deviceMap = {
+      "name": selectedDevice.name,
+      "uid": selectedDevice.uid,
+      "currentrating": selectedDevice.currentrating,
+      "readings": selectedDevice..readings,
+      "dateAdded": selectedDevice.dateAdded
+    };
+    prefs.setString("selectedDevice",
+        jsonEncode(deviceMap)); // save the selected device in memory
   }
 }
 

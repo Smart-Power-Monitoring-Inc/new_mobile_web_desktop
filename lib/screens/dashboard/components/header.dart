@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../controllers/AuthController.dart';
+import '../../../helper.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -96,7 +97,7 @@ class _ProfileCardState extends State<ProfileCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image.asset(
-                      "assets/images/profile_pic.png",
+                      Img.get("knust.png"),
                       height: 38,
                     ),
                     if (!Responsive.isMobile(context))

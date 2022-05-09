@@ -1,5 +1,6 @@
 import 'package:admin/controllers/PageController.dart';
 import 'package:admin/helper.dart';
+import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -14,37 +15,52 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Image.asset(Img.get("knust.png")),
-            ),
-            DrawerListTile(
-              title: "Dashboard",
-              svgSrc: "assets/icons/menu_dashbord.svg",
-              press: () {
-                Provider.of<MyPageController>(context, listen: false)
-                    .setPage(0);
-              },
-            ),
-            DrawerListTile(
-              title: "Manage Devices",
-              svgSrc: "assets/icons/menu_doc.svg",
-              press: () {
-                Provider.of<MyPageController>(context, listen: false)
-                    .setPage(1);
-              },
-            ),
-            DrawerListTile(
-              title: "Settings",
-              svgSrc: "assets/icons/menu_setting.svg",
-              press: () {
-                Provider.of<MyPageController>(context, listen: false)
-                    .setPage(2);
-              },
-            ),
-          ],
-        ),
+        child: FutureBuilder<int?>(
+            future: Provider.of<MyPageController>(context).page,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData)
+                Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              int? page = snapshot.data;
+              return ListView(
+                children: [
+                  DrawerHeader(
+                    child: Image.asset(Img.get("knust.png")),
+                  ),
+                  DrawerListTile(
+                    title: "Dashboard",
+                    svgSrc: "assets/icons/menu_dashbord.svg",
+                    selected: page == 0,
+                    press: () {
+                      if (Responsive.isMobile(context)) Navigator.pop(context);
+                      Provider.of<MyPageController>(context, listen: false)
+                          .setPage(0);
+                    },
+                  ),
+                  DrawerListTile(
+                    title: "Manage Devices",
+                    svgSrc: "assets/icons/menu_doc.svg",
+                    selected: page == 1,
+                    press: () {
+                      if (Responsive.isMobile(context)) Navigator.pop(context);
+                      Provider.of<MyPageController>(context, listen: false)
+                          .setPage(1);
+                    },
+                  ),
+                  DrawerListTile(
+                    title: "Settings",
+                    svgSrc: "assets/icons/menu_setting.svg",
+                    selected: page == 2,
+                    press: () {
+                      if (Responsive.isMobile(context)) Navigator.pop(context);
+                      Provider.of<MyPageController>(context, listen: false)
+                          .setPage(2);
+                    },
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }
