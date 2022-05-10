@@ -1,16 +1,23 @@
+import 'dart:io';
+
 import 'package:admin/constants.dart';
-import 'package:admin/controllers/DeviceController.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/devices/DeviceChart.dart';
 import 'package:admin/screens/devices/DeviceDetailsComponent.dart';
+import 'package:admin/screens/devices/QRCode.dart';
 import 'package:flutter/material.dart';
 
 class DeviceDetails extends StatelessWidget {
-  final Device device;
-  const DeviceDetails({Key? key, required this.device}) : super(key: key);
-
+  // final Device device;
+  const DeviceDetails({
+    Key? key,
+    //  required this.device
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final style =
+        Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.white);
+
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -20,12 +27,75 @@ class DeviceDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Device Details",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Device Details",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              IconButton(
+                  onPressed: () {
+                    // show device profile popup
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                            title: Text("Device Profile"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("Okay"))
+                            ],
+                            content: SizedBox(
+                                height: 300,
+                                child: Scrollbar(
+                                  isAlwaysShown: true,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          title: Text("Device name"),
+                                          subtitle: Text(
+                                            "Room Main Socket",
+                                            style: style,
+                                          ),
+                                        ),
+                                        ListTile(
+                                          title: Text("Rating (A)"),
+                                          subtitle: Text("30A", style: style),
+                                        ),
+                                        ListTile(
+                                          title: Text("Total Power (kW)"),
+                                          subtitle: Text("30 kW", style: style),
+                                        ),
+                                        ListTile(
+                                          title: Text("Total Energy (kWh)"),
+                                          subtitle:
+                                              Text("30 kWh", style: style),
+                                        ),
+                                        ListTile(
+                                          title: Text("Total uptime"),
+                                          subtitle:
+                                              Text("00:10:22:14", style: style),
+                                        ),
+                                        ListTile(
+                                          title: Text("Last seen"),
+                                          subtitle: Text("Date", style: style),
+                                        ),
+                                        ListTile(
+                                          title: Text("Date added"),
+                                          subtitle: Text("Date", style: style),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ))));
+                  },
+                  icon: Icon(Icons.more_vert_outlined))
+            ],
           ),
           SizedBox(height: defaultPadding),
           DeviceChart(),
@@ -58,7 +128,48 @@ class DeviceDetails extends StatelessWidget {
           ),
           !Responsive.isMobile(context)
               ? ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Show dialog with the qrscanner built in (if on mobile) and text field
+                    // Show only input field if on web or desktop
+
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Platform.isIOS ||
+                                              Platform.isAndroid
+                                          ? Text(
+                                              "Scan device QR Code or enter the device id in the textfield below")
+                                          : Text(
+                                              "Enter smart socket id to register the device")),
+                                  Platform.isIOS || Platform.isAndroid
+                                      ? QRCodeView()
+                                      : Container(),
+                                  TextFormField(
+                                    decoration: InputDecoration(
+                                        labelText: "Device Id",
+                                        hintText: "Device Id",
+                                        border: OutlineInputBorder()),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Please enter a value";
+                                      }
+                                      return null;
+                                    },
+                                  )
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("Okay"))
+                              ],
+                            ));
+                  },
                   style: ElevatedButton.styleFrom(
                       elevation: 2,
                       primary: white,

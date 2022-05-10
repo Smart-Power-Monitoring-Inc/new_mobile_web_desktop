@@ -26,28 +26,39 @@ class DeviceList extends StatelessWidget {
             "Devices",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: 600,
-              columns: [
-                DataColumn(
-                  label: Text("Device Name"),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: 800,
+              child: DataTable2(
+                columnSpacing: defaultPadding,
+                minWidth: 600,
+                columns: [
+                  DataColumn(
+                    label: Text(
+                      "Device Name",
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text("Last seen"),
+                  ),
+                  DataColumn(
+                    label: Text("Status"),
+                  ),
+                  DataColumn(
+                    label: Text("Energy"),
+                  ),
+                  DataColumn(
+                    label: Text("GH¢"),
+                  ),
+                  DataColumn(
+                    label: Text(""),
+                  ),
+                ],
+                rows: List.generate(
+                  demoRecentFiles.length,
+                  (index) => recentFileDataRow(demoRecentFiles[index], context),
                 ),
-                DataColumn(
-                  label: Text("Last seen"),
-                ),
-                DataColumn(
-                  label: Text("Status"),
-                ),
-                DataColumn(
-                  label: Text(""),
-                ),
-              ],
-              rows: List.generate(
-                demoRecentFiles.length,
-                (index) => recentFileDataRow(demoRecentFiles[index], context),
               ),
             ),
           ),
@@ -68,15 +79,25 @@ DataRow recentFileDataRow(RecentFile fileInfo, context) {
               height: 30,
               width: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(fileInfo.title!),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                child: Text(
+                  fileInfo.title!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  softWrap: false,
+                  // textAlign: TextAlign.left,
+                ),
+              ),
             ),
           ],
         ),
       ),
       DataCell(Text(fileInfo.date!)),
       DataCell(Text(fileInfo.size!)),
+      DataCell(Text("15 kWH")),
+      DataCell(Text("GH¢ 2.14")),
       DataCell(InkWell(
         onTap: () {
           showDialog(
