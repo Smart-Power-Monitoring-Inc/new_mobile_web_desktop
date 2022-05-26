@@ -126,7 +126,7 @@ class _AuthenticationState extends State<Authentication> {
                         ),
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
                       ElevatedButton(
                           onPressed: () {
@@ -136,10 +136,10 @@ class _AuthenticationState extends State<Authentication> {
                           style: ElevatedButton.styleFrom(
                               primary: white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(2)),
-                              padding: const EdgeInsets.all(10)),
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.all(5)),
                           child: SizedBox(
-                              width: 300,
+                              width: 150,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(

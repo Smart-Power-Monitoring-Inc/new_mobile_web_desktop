@@ -1,6 +1,8 @@
+import 'package:admin/controllers/PageController.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/components/my_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import 'components/header.dart';
@@ -16,7 +18,16 @@ class DashboardScreen extends StatelessWidget {
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
-            Header(),
+            FutureBuilder<int?>(
+                future: Provider.of<MyPageController>(context).page,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData && snapshot.data != null)
+                    return Container();
+                  print(snapshot.data);
+                  if (snapshot.data == 2) return Container();
+
+                  return Header();
+                }),
             SizedBox(height: defaultPadding),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,18 +1,29 @@
-import 'dart:io';
-
 import 'package:admin/constants.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/devices/DeviceChart.dart';
 import 'package:admin/screens/devices/DeviceDetailsComponent.dart';
-import 'package:admin/screens/devices/QRCode.dart';
+import 'package:admin/screens/devices/newDevice.dart';
 import 'package:flutter/material.dart';
 
-class DeviceDetails extends StatelessWidget {
+class DeviceDetails extends StatefulWidget {
   // final Device device;
   const DeviceDetails({
     Key? key,
     //  required this.device
   }) : super(key: key);
+
+  @override
+  State<DeviceDetails> createState() => _DeviceDetailsState();
+}
+
+class _DeviceDetailsState extends State<DeviceDetails> {
+  late TextEditingController controller;
+  @override
+  void initState() {
+    controller = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final style =
@@ -52,7 +63,7 @@ class DeviceDetails extends StatelessWidget {
                             content: SizedBox(
                                 height: 300,
                                 child: Scrollbar(
-                                  isAlwaysShown: true,
+                                  thumbVisibility: true,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: [
@@ -132,43 +143,7 @@ class DeviceDetails extends StatelessWidget {
                     // Show dialog with the qrscanner built in (if on mobile) and text field
                     // Show only input field if on web or desktop
 
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Platform.isIOS ||
-                                              Platform.isAndroid
-                                          ? Text(
-                                              "Scan device QR Code or enter the device id in the textfield below")
-                                          : Text(
-                                              "Enter smart socket id to register the device")),
-                                  Platform.isIOS || Platform.isAndroid
-                                      ? QRCodeView()
-                                      : Container(),
-                                  TextFormField(
-                                    decoration: InputDecoration(
-                                        labelText: "Device Id",
-                                        hintText: "Device Id",
-                                        border: OutlineInputBorder()),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "Please enter a value";
-                                      }
-                                      return null;
-                                    },
-                                  )
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text("Okay"))
-                              ],
-                            ));
+                    newDevice(context, controller);
                   },
                   style: ElevatedButton.styleFrom(
                       elevation: 2,

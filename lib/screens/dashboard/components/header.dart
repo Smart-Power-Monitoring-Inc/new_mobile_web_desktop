@@ -45,8 +45,16 @@ class Header extends StatelessWidget {
               }),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-        // Expanded(child: SearchField()),
-        ProfileCard()
+        FutureBuilder<int?>(
+            future: Provider.of<MyPageController>(context).page,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData && snapshot.data != null)
+                return Container();
+              print(snapshot.data);
+              if (snapshot.data == 2) return Container();
+
+              return ProfileCard();
+            }),
       ],
     );
   }

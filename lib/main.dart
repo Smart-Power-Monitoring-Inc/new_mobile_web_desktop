@@ -1,5 +1,6 @@
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/MenuController.dart';
+import 'package:admin/controllers/NetworkController.dart';
 import 'package:admin/controllers/PageController.dart';
 import 'package:admin/screens/authentication/authentication.dart';
 import 'package:admin/screens/main/main_screen.dart';
@@ -20,6 +21,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (context) => MyPageController(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => NetworkController(),
     ),
   ], child: MyApp()));
 }

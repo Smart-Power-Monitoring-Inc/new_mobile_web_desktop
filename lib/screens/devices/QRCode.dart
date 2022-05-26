@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:admin/screens/devices/verifyDevice.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -32,7 +33,8 @@ class _QRCodeViewState extends State<QRCodeView> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
-        print("Scanned code " + scanData.code.toString());
+        // print("Scanned code " + scanData.code.toString());
+        verifyDeviceQR(context, controller, scanData.code.toString());
       });
     });
   }
@@ -45,16 +47,20 @@ class _QRCodeViewState extends State<QRCodeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Platform.isAndroid || Platform.isIOS
-            ? QRView(
-                key: qrKey,
-                cameraFacing: CameraFacing.back,
-                onQRViewCreated: _onQRViewCreated,
-              )
-            : Container(),
-      ],
+    return Container(
+      height: 200,
+      width: 200,
+      padding: const EdgeInsets.all(8.0),
+      child: Platform.isAndroid || Platform.isIOS
+          ? QRView(
+              key: qrKey,
+              cameraFacing: CameraFacing.back,
+              onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderRadius: 10,
+              ),
+            )
+          : Container(),
     );
   }
 }
