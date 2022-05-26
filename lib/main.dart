@@ -4,6 +4,8 @@ import 'package:admin/controllers/NetworkController.dart';
 import 'package:admin/controllers/PageController.dart';
 import 'package:admin/screens/authentication/authentication.dart';
 import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/screens/profile/confirmPhone.dart';
+import 'package:admin/screens/profile/profile.dart';
 import 'package:admin/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,6 +47,8 @@ class MyApp extends StatelessWidget {
           "/login": (context) => Authentication(),
           "/": (context) => MainScreen(),
           "/splash": (context) => SplashScreen(),
+          "/profile": (context) => MyProfile(),
+          "/confirm": (context) => ConfirmPhone(),
         });
   }
 }

@@ -35,6 +35,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     widthFactor: Responsive.isMobile(context) ? 1 : 0.4,
                     child: Column(
                       children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Settings",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: white),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Column(
                           children: [
                             Row(
@@ -65,6 +82,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     : Icons.arrow_forward,
                                 size: 15,
                               ),
+                              onTap: () =>
+                                  Navigator.pushNamed(context, "/profile"),
                             ),
                             ListTile(
                               leading: Icon(Icons.lock_outline_rounded),
