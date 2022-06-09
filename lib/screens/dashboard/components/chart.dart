@@ -35,7 +35,11 @@ class Chart extends StatelessWidget {
                         height: 0.5,
                       ),
                 ),
-                Text("of 128GB")
+                Text("of 128kwh",
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(color: Colors.white))
               ],
             ),
           ),

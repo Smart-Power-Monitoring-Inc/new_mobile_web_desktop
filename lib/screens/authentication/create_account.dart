@@ -6,29 +6,43 @@ import 'package:provider/provider.dart';
 
 import '../../helper.dart';
 
-class Authentication extends StatefulWidget {
-  const Authentication({Key? key}) : super(key: key);
+class CreateAccount extends StatefulWidget {
+  const CreateAccount({Key? key}) : super(key: key);
 
   @override
-  State<Authentication> createState() => _AuthenticationState();
+  State<CreateAccount> createState() => _CreateAccountState();
 }
 
-class _AuthenticationState extends State<Authentication> {
+class _CreateAccountState extends State<CreateAccount> {
   final List<String> images = ["1.jpg", "2.jpg", "3.jpg"];
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController phone, pincode;
+  late TextEditingController phone, pincode, name;
   String countryCode = "";
 
   @override
   void initState() {
     phone = TextEditingController();
     pincode = TextEditingController();
+    name = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    name.dispose();
+    phone.dispose();
+    pincode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: bgColor,
+        elevation: 0,
+        title: Text("Create Account"),
+      ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Form(
@@ -96,14 +110,14 @@ class _AuthenticationState extends State<Authentication> {
                               Expanded(
                                 child: TextFormField(
                                   controller: phone,
-                                  textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.phone,
                                   validator: (value) {
-                                    if (value!.isEmpty && countryCode.isEmpty) {
-                                      return "Phone number is required. Kindly select a country";
+                                    if (value!.isEmpty) {
+                                      return "Phone number is required";
                                     }
                                     return null;
                                   },
+                                  textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
                                     hintText: "Phone",
                                     border: InputBorder.none,
@@ -119,15 +133,34 @@ class _AuthenticationState extends State<Authentication> {
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.done,
+                        controller: name,
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Name is required";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          hintText: "Full name",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      TextFormField(
+                        textInputAction: TextInputAction.done,
                         obscureText: true,
                         controller: pincode,
+                        keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Pincode is required";
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(left: 10),
                           hintText: "Pin code",
@@ -138,12 +171,18 @@ class _AuthenticationState extends State<Authentication> {
                         height: 50,
                       ),
                       ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate())
-                              context.read<AuthController>().login(context,
-                                  phone: phone.text,
-                                  pin: pincode.text,
-                                  countryCode: countryCode);
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthController>().create(
+                                    context,
+                                    countryCode: countryCode,
+                                    phone: phone.text,
+                                    name: name.text,
+                                    pin: pincode.text,
+                                  );
+                            }
+                            // Navigator.pushNamedAndRemoveUntil(
+                            //     context, '/', (route) => false);
                           },
                           style: ElevatedButton.styleFrom(
                               primary: white,
@@ -155,7 +194,7 @@ class _AuthenticationState extends State<Authentication> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Text(
-                                  "Login",
+                                  "Create account",
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
@@ -164,22 +203,7 @@ class _AuthenticationState extends State<Authentication> {
                                           color: black,
                                           fontWeight: FontWeight.bold),
                                 ),
-                              ))),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () => Navigator.pushNamed(context, "/create"),
-                        child: Text(
-                          "Don't have an account? Create one",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                  decoration: TextDecoration.underline,
-                                  color: blue),
-                        ),
-                      )
+                              )))
                     ],
                   ),
                 )

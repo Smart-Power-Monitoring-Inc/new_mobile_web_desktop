@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:admin/constants.dart';
 import 'package:admin/controllers/PageController.dart';
+import 'package:admin/controllers/UserController.dart';
+import 'package:admin/models/User.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/dashboard_screen.dart';
 import 'package:admin/screens/devices/ManageDevices.dart';
 import 'package:admin/screens/devices/newDevice.dart';
 import 'package:admin/screens/settings/Settings.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'components/side_menu.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,10 +21,25 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late TextEditingController controllerText;
+  void showWelcomeNote(String name) {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        title: "Welcome",
+        text: "Welcome back $name!",
+        animType: CoolAlertAnimType.scale,
+        backgroundColor: white,
+        autoCloseDuration: Duration(seconds: 2));
+  }
+
   @override
   void initState() {
     controllerText = TextEditingController();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      User user = await context.read<UserController>().getUser();
+      Future.delayed(Duration(seconds: 1), () => showWelcomeNote(user.name));
+    });
   }
 
   // int? pageNumber = 0;

@@ -8,16 +8,44 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserController with ChangeNotifier {
   // get user data from db
-  Future<User> getUser(String uid) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? user = prefs.getString('user');
-    Map<String, dynamic> userJson = jsonDecode(user as String);
+  Future<User> get returnUser async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return User(
-        email: userJson['email'],
-        name: userJson['name'],
-        phone: userJson['phone'],
-        uid: uid);
+      String? user = prefs.getString('user') ?? {}.toString();
+      Map<String, dynamic> userJson = jsonDecode(user);
+
+      notifyListeners();
+      return User(
+          email: userJson['email'],
+          name: userJson['f_name'],
+          phone: userJson['phone'],
+          uid: userJson['id']);
+    } catch (e) {
+      debugPrint("User fetch error: $e");
+      rethrow;
+    }
+  }
+
+  Future<User> getUser() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      Response response =
+          await Dio().get(baseUrl + 'user_data/${prefs.getString("uid")}');
+      debugPrint(response.data.toString());
+      // String? user = prefs.getString('user');
+      Map<String, dynamic> userJson = response.data['userDetails'];
+      await prefs.setString('user', jsonEncode(userJson));
+      notifyListeners();
+      return User(
+          email: userJson['email'],
+          name: userJson['f_name'],
+          phone: userJson['phone'],
+          uid: userJson['id']);
+    } catch (e) {
+      debugPrint("User fetch error: $e");
+      rethrow;
+    }
   }
 
   Future<Map<String, dynamic>> createUser(User user) async {

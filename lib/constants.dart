@@ -8,4 +8,5 @@ const white = Colors.white;
 const grey = Colors.grey;
 Color? lightGrey = Colors.grey[300];
 const black = Colors.black;
-const baseUrl = "http://192.168.1.1:3000/";
+const blue = Colors.blue;
+const baseUrl = "http://127.0.0.1:3000/";

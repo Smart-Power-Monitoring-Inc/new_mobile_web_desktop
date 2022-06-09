@@ -89,6 +89,7 @@ class _ConfirmPhoneState extends State<ConfirmPhone> {
                     enablePinAutofill: true,
                     enableActiveFill: true,
                     cursorColor: white,
+                    keyboardType: TextInputType.phone,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     blinkWhenObscuring: true,
                     pinTheme: PinTheme(

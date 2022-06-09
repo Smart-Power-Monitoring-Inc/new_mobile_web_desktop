@@ -3,6 +3,7 @@ import 'package:admin/controllers/MenuController.dart';
 import 'package:admin/controllers/NetworkController.dart';
 import 'package:admin/controllers/PageController.dart';
 import 'package:admin/screens/authentication/authentication.dart';
+import 'package:admin/screens/authentication/create_account.dart';
 import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/screens/profile/confirmPhone.dart';
 import 'package:admin/screens/profile/profile.dart';
@@ -12,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'controllers/AuthController.dart';
+import 'controllers/UserController.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
@@ -26,6 +28,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (context) => NetworkController(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => UserController(),
     ),
   ], child: MyApp()));
 }
@@ -49,6 +54,7 @@ class MyApp extends StatelessWidget {
           "/splash": (context) => SplashScreen(),
           "/profile": (context) => MyProfile(),
           "/confirm": (context) => ConfirmPhone(),
+          "/create": (context) => CreateAccount(),
         });
   }
 }
