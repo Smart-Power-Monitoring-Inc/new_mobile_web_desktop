@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../constants.dart';
 
 List<Device> _deviceList = [];
 
@@ -12,7 +15,7 @@ class DeviceController with ChangeNotifier {
 
   Future<List> get getDeviceData async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+Response response = await Dio().get(baseUrl + 'device_data/${prefs.getString("uid")}');
     Map<String, dynamic> deviceData =
         jsonDecode(prefs.getString('/device/uid').toString());
     if (deviceData.isNotEmpty) {

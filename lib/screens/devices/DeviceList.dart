@@ -19,8 +19,10 @@ class DeviceList extends StatelessWidget {
         color: secondaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
+      alignment: Alignment.center,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "Devices",
@@ -30,6 +32,7 @@ class DeviceList extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: SizedBox(
               width: 800,
+              height: 300,
               child: DataTable2(
                 columnSpacing: defaultPadding,
                 minWidth: 600,

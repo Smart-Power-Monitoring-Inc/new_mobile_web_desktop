@@ -15,7 +15,6 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(defaultPadding),
         child: Column(
           children: [
             FutureBuilder<int?>(
@@ -25,7 +24,6 @@ class DashboardScreen extends StatelessWidget {
                     return Container();
                   print(snapshot.data);
                   if (snapshot.data == 2) return Container();
-
                   return Header();
                 }),
             SizedBox(height: defaultPadding),

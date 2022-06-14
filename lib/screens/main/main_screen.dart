@@ -77,26 +77,33 @@ class _MainScreenState extends State<MainScreen> {
                 );
               int? page = snapshot.data;
 
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // We want this side menu only for large screen
-                  if (Responsive.isDesktop(context))
-                    Expanded(
-                      // default flex = 1
-                      // and it takes 1/6 part of the screen
-                      child: SideMenu(),
-                    ),
-                  Expanded(
-                    // It takes 5/6 part of the screen
-                    flex: 5,
-                    child: page == 0
-                        ? DashboardScreen()
-                        : page == 1
-                            ? ManageDevicesScreen()
-                            : SettingsScreen(),
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // We want this side menu only for large screen
+                      if (Responsive.isDesktop(context))
+                        Expanded(
+                          // default flex = 1
+                          // and it takes 1/6 part of the screen
+                          child: SideMenu(),
+                        ),
+                      Expanded(
+                        // It takes 5/6 part of the screen
+                        flex: 5,
+                        child: page == 0
+                            ? DashboardScreen()
+                            : page == 1
+                                ? ManageDevicesScreen()
+                                : SettingsScreen(),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               );
             }),
       ),

@@ -25,25 +25,28 @@ class RecentFiles extends StatelessWidget {
             "Recent Devices",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: DataTable2(
-              columnSpacing: defaultPadding,
-              minWidth: 600,
-              columns: [
-                DataColumn(
-                  label: Text("Device Name"),
+          SingleChildScrollView(
+            child: SizedBox(
+              width: 600,
+              height: 400,
+              child: DataTable2(
+                columnSpacing: defaultPadding,
+                minWidth: 600,
+                columns: [
+                  DataColumn(
+                    label: Text("Device Name"),
+                  ),
+                  DataColumn(
+                    label: Text("Last seen"),
+                  ),
+                  DataColumn(
+                    label: Text("Status"),
+                  ),
+                ],
+                rows: List.generate(
+                  demoRecentFiles.length,
+                  (index) => recentFileDataRow(demoRecentFiles[index]),
                 ),
-                DataColumn(
-                  label: Text("Last seen"),
-                ),
-                DataColumn(
-                  label: Text("Status"),
-                ),
-              ],
-              rows: List.generate(
-                demoRecentFiles.length,
-                (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
           ),

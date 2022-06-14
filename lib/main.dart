@@ -11,7 +11,6 @@ import 'package:admin/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import 'controllers/AuthController.dart';
 import 'controllers/UserController.dart';
 

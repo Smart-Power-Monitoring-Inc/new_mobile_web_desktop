@@ -12,7 +12,6 @@ class ManageDevicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(defaultPadding),
         child: Column(children: [
           Header(),
           SizedBox(height: defaultPadding),
@@ -20,15 +19,15 @@ class ManageDevicesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                  flex: 5,
-                  child: Column(
-                    children: [
-                      DeviceList(),
-                      if (Responsive.isMobile(context))
-                        SizedBox(height: defaultPadding),
-                      if (Responsive.isMobile(context)) DeviceDetails(),
-                    ],
-                  )),
+                child: Column(
+                  children: [
+                    DeviceList(),
+                    if (Responsive.isMobile(context))
+                      SizedBox(height: defaultPadding),
+                    if (Responsive.isMobile(context)) DeviceDetails(),
+                  ],
+                ),
+              ),
               if (!Responsive.isMobile(context))
                 Expanded(flex: 2, child: DeviceDetails())
             ],

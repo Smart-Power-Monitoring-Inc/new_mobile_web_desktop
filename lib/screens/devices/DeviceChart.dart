@@ -12,6 +12,7 @@ class DeviceChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
+      width: 200,
       child: Stack(
         children: [
           PieChart(

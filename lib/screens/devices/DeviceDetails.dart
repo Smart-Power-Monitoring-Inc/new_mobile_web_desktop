@@ -35,8 +35,10 @@ class _DeviceDetailsState extends State<DeviceDetails> {
         color: secondaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
+      // height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
