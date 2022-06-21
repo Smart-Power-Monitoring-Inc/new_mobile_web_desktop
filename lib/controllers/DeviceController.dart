@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,22 +15,34 @@ class DeviceController with ChangeNotifier {
 
   Future<List> get getDeviceData async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-Response response = await Dio().get(baseUrl + 'device_data/${prefs.getString("uid")}');
-    Map<String, dynamic> deviceData =
-        jsonDecode(prefs.getString('/device/uid').toString());
-    if (deviceData.isNotEmpty) {
-      notifyListeners();
+
+    Response response =
+        await Dio().get(baseUrl + 'device_search/${prefs.getString("uid")}');
+
+    print("Device data:  " + response.data['result']['devices'].toString());
+    if (response.data['result']['devices'].isNotEmpty) {
       return [
         true,
-        Device(
-            name: deviceData['name'],
-            uid: deviceData['uid'],
-            currentrating: deviceData['currentrating'],
-            readings: deviceData['readings'])
+        response.data['result']['devices']
+            .map((device) => Device(
+                name: device['device_name'],
+                uid: device['device_uid'],
+                currentrating: 0,
+                readings: []))
+            .toList()
       ];
     } else {
-      return [false];
+      return [false, []];
     }
+  }
+
+  Stream<List> get getOnlineDevices async* {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Response response = await Dio()
+        .get(baseUrl + 'device_search/${prefs.getString("uid")}/g?online=true');
+    log(response.data.toString());
+    yield [];
   }
 
   Future<Device> getSelectdDevice(int index) async {

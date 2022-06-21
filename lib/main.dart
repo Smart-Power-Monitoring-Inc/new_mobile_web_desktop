@@ -1,4 +1,5 @@
 import 'package:admin/constants.dart';
+import 'package:admin/controllers/DeviceController.dart';
 import 'package:admin/controllers/MenuController.dart';
 import 'package:admin/controllers/NetworkController.dart';
 import 'package:admin/controllers/PageController.dart';
@@ -30,6 +31,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (context) => UserController(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => DeviceController(),
     ),
   ], child: MyApp()));
 }

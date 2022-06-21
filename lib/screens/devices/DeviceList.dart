@@ -1,15 +1,23 @@
+import 'package:admin/controllers/DeviceController.dart';
 import 'package:admin/models/RecentFile.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
-class DeviceList extends StatelessWidget {
+class DeviceList extends StatefulWidget {
   const DeviceList({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<DeviceList> createState() => _DeviceListState();
+}
+
+class _DeviceListState extends State<DeviceList> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,36 +41,66 @@ class DeviceList extends StatelessWidget {
             child: SizedBox(
               width: 800,
               height: 300,
-              child: DataTable2(
-                columnSpacing: defaultPadding,
-                minWidth: 600,
-                columns: [
-                  DataColumn(
-                    label: Text(
-                      "Device Name",
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text("Last seen"),
-                  ),
-                  DataColumn(
-                    label: Text("Status"),
-                  ),
-                  DataColumn(
-                    label: Text("Energy"),
-                  ),
-                  DataColumn(
-                    label: Text("GH¢"),
-                  ),
-                  DataColumn(
-                    label: Text(""),
-                  ),
-                ],
-                rows: List.generate(
-                  demoRecentFiles.length,
-                  (index) => recentFileDataRow(demoRecentFiles[index], context),
-                ),
-              ),
+              child: FutureBuilder<List>(
+                  future: context.read<DeviceController>().getDeviceData,
+                  builder: (context, snapshot) {
+                    print(snapshot.data);
+                    if (snapshot.data == null && !snapshot.hasData) {
+                      return CircularProgressIndicator.adaptive();
+                    }
+                    bool allowRender = snapshot.data![0];
+                    if (!allowRender) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "No devices have been registered",
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }
+                    List devices = snapshot.data![1]
+                        .map((device) => RecentFile(
+                              date: DateTime.now().toIso8601String(),
+                              title: device.name,
+                            ))
+                        .toList();
+                    return DataTable2(
+                      columnSpacing: defaultPadding,
+                      minWidth: 600,
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            "Device Name",
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text("Last seen"),
+                        ),
+                        DataColumn(
+                          label: Text("Status"),
+                        ),
+                        DataColumn(
+                          label: Text("Energy"),
+                        ),
+                        DataColumn(
+                          label: Text("GH¢"),
+                        ),
+                        DataColumn(
+                          label: Text(""),
+                        ),
+                      ],
+                      rows: List.generate(
+                        devices.length,
+                        (index) => recentFileDataRow(devices[index], context),
+                      ),
+                    );
+                  }),
             ),
           ),
         ],
@@ -78,7 +116,7 @@ DataRow recentFileDataRow(RecentFile fileInfo, context) {
         Row(
           children: [
             SvgPicture.asset(
-              fileInfo.icon!,
+              fileInfo.icon ?? "assets/icons/xd_file.svg",
               height: 30,
               width: 30,
             ),
@@ -97,8 +135,10 @@ DataRow recentFileDataRow(RecentFile fileInfo, context) {
           ],
         ),
       ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
+      DataCell(Text(DateFormat.yMMMEd()
+          .add_Hm()
+          .format(DateTime.parse(fileInfo.date.toString())))),
+      DataCell(Text(fileInfo.size ?? "0")),
       DataCell(Text("15 kWH")),
       DataCell(Text("GH¢ 2.14")),
       DataCell(InkWell(

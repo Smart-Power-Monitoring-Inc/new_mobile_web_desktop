@@ -16,14 +16,19 @@ class NetworkController with ChangeNotifier {
   Future<bool> checkWifiNetwork(BuildContext context) async {
     // Used to check if the device is connected to a wifi network
     // Returns true if connected to a wifi network
-    var connectivityResult = await (Connectivity().checkConnectivity());
+    try {
+      var connectivityResult = await (Connectivity().checkConnectivity());
 
-    if (connectivityResult == ConnectivityResult.mobile)
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              "You need to be connected to a wifi network for this application to function correctly")));
+      if (connectivityResult == ConnectivityResult.mobile)
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "You need to be connected to a wifi network for this application to function correctly")));
 
-    return connectivityResult == ConnectivityResult.wifi;
+      return connectivityResult == ConnectivityResult.wifi;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   Future<bool> checkNetworkSSID(BuildContext context) async {

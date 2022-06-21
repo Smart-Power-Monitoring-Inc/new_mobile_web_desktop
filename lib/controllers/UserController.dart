@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:admin/constants.dart';
 import 'package:admin/models/User.dart';
@@ -6,8 +7,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helper.dart';
+
 class UserController with ChangeNotifier {
   // get user data from db
+  bool error = false;
   Future<User> get returnUser async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -27,7 +31,7 @@ class UserController with ChangeNotifier {
     }
   }
 
-  Future<User> getUser() async {
+  Future<User> getUser(BuildContext context) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
@@ -37,15 +41,89 @@ class UserController with ChangeNotifier {
       Map<String, dynamic> userJson = response.data['userDetails'];
       await prefs.setString('user', jsonEncode(userJson));
       notifyListeners();
+      error = false;
+
       return User(
           email: userJson['email'],
           name: userJson['f_name'],
           phone: userJson['phone'],
           uid: userJson['id']);
+    } on SocketException catch (e) {
+      debugPrint("User fetch error: $e");
+      errorWidget(context);
+      error = true;
+
+      rethrow;
+    } on DioError catch (e) {
+      debugPrint("User fetch error(Dio error): $e");
+      errorWidget(context);
+      error = true;
+
+      throw Error();
     } catch (e) {
       debugPrint("User fetch error: $e");
-      rethrow;
+      errorWidget(context);
+      error = true;
+      throw Exception(e);
     }
+  }
+
+  void errorWidget(BuildContext context) {
+    if (error) return;
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      isScrollControlled: true,
+      backgroundColor: Color(0xffffeb00),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              child: Image.asset(
+                Img.get("error.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Backend Unreachable",
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(color: black, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: black, shape: StadiumBorder()),
+                onPressed: () {
+                  notifyListeners();
+                  Navigator.pop(context);
+                  getUser(context);
+                  error = false;
+                },
+                child: Text(
+                  "Reload",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(fontWeight: FontWeight.bold, color: white),
+                ))
+          ],
+        ),
+      ),
+    );
   }
 
   Future<Map<String, dynamic>> createUser(User user) async {
