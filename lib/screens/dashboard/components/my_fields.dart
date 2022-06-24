@@ -13,41 +13,45 @@ class MyFiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical:
-                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "",
+                style: Theme.of(context).textTheme.subtitle1,
               ),
-              onPressed: () {},
-              icon: Icon(Icons.add),
-              label: Text("Add New"),
+              ElevatedButton.icon(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: defaultPadding * 1.5,
+                    vertical:
+                        defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
+                  ),
+                ),
+                onPressed: () {},
+                icon: Icon(Icons.add),
+                label: Text("Add New"),
+              ),
+            ],
+          ),
+          SizedBox(height: defaultPadding),
+          Responsive(
+            mobile: FileInfoCardGridView(
+              crossAxisCount: _size.width < 650 ? 2 : 4,
+              childAspectRatio:
+                  _size.width < 650 && _size.width > 350 ? 1.3 : 1,
             ),
-          ],
-        ),
-        SizedBox(height: defaultPadding),
-        Responsive(
-          mobile: FileInfoCardGridView(
-            crossAxisCount: _size.width < 650 ? 2 : 4,
-            childAspectRatio: _size.width < 650 && _size.width > 350 ? 1.3 : 1,
+            tablet: FileInfoCardGridView(),
+            desktop: FileInfoCardGridView(
+              childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
+            ),
           ),
-          tablet: FileInfoCardGridView(),
-          desktop: FileInfoCardGridView(
-            childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

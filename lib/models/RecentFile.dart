@@ -1,16 +1,17 @@
 class RecentFile {
   final String? icon, title, date, size;
-
-  RecentFile({this.icon, this.title, this.date, this.size});
+  bool online;
+  RecentFile(
+      {this.icon, this.title, this.date, this.size, this.online = false});
 }
 
 List demoRecentFiles = [
   RecentFile(
-    icon: "assets/icons/xd_file.svg",
-    title: "XD File",
-    date: "01-03-2021",
-    size: "3.5mb",
-  ),
+      icon: "assets/icons/xd_file.svg",
+      title: "XD File",
+      date: "01-03-2021",
+      size: "3.5mb",
+      online: true),
   RecentFile(
     icon: "assets/icons/Figma_file.svg",
     title: "Figma File",

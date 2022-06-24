@@ -12,6 +12,7 @@ class StarageDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(defaultPadding),
+      margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: secondaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(10)),

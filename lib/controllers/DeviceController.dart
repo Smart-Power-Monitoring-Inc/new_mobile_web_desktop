@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,13 +35,13 @@ class DeviceController with ChangeNotifier {
     }
   }
 
-  Stream<List> get getOnlineDevices async* {
+  Stream<Map<String, dynamic>> getOnlineDevices(bool online) async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Response response = await Dio()
-        .get(baseUrl + 'device_search/${prefs.getString("uid")}/g?online=true');
-    log(response.data.toString());
-    yield [];
+    Response response = await Dio().get(
+        baseUrl + 'device_search/${prefs.getString("uid")}/g?online=$online');
+
+    yield response.data as Map<String, dynamic>;
   }
 
   Future<Device> getSelectdDevice(int index) async {
