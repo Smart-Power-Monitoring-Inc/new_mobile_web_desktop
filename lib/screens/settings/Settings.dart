@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:admin/constants.dart';
+import 'package:admin/controllers/AuthController.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/components/header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -229,7 +231,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () =>
+                              context.read<AuthController>().logout(context),
                           style: ElevatedButton.styleFrom(
                               primary: Colors.red,
                               shape: RoundedRectangleBorder(

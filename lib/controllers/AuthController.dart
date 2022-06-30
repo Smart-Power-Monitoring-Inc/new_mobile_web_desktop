@@ -30,7 +30,13 @@ class AuthController extends ChangeNotifier {
       debugPrint(response.data.toString());
       if (response.data["stat"]) {
         Navigator.pop(context);
+        return true;
       }
+      CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          title: "Error",
+          text: response.data["msg"]);
       return response.data["stat"] ?? false;
     } catch (e) {
       debugPrint("Login error: $e");

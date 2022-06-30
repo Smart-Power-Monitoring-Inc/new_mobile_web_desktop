@@ -80,14 +80,20 @@ class UserController with ChangeNotifier {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-              child: Image.asset(
-                Img.get("error.png"),
-                fit: BoxFit.cover,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+                child: SizedBox(
+                  child: Image.asset(
+                    Img.get("error.png"),
+                    fit: BoxFit.contain,
+                    height: 300,
+                    width: 300,
+                  ),
+                ),
               ),
             ),
             SizedBox(

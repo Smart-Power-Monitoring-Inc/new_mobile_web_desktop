@@ -49,7 +49,7 @@ class FileInfoCard extends StatelessWidget {
           ),
           ProgressLine(
             color: info.color,
-            percentage: info.percentage,
+            percentage: info.percentage!,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

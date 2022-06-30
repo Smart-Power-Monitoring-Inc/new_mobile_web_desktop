@@ -1,4 +1,5 @@
 import 'package:admin/constants.dart';
+import 'package:admin/controllers/DashboardParamsController.dart';
 import 'package:admin/controllers/DeviceController.dart';
 import 'package:admin/controllers/MenuController.dart';
 import 'package:admin/controllers/NetworkController.dart';
@@ -34,6 +35,9 @@ void main() {
     ),
     ChangeNotifierProvider(
       create: (context) => DeviceController(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => DashbaordParamsController(),
     ),
   ], child: MyApp()));
 }

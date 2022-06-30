@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../controllers/AuthController.dart';
+import '../../../controllers/UserController.dart';
 import '../../../helper.dart';
+import '../../../models/User.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -109,10 +111,17 @@ class _ProfileCardState extends State<ProfileCard> {
                       height: 38,
                     ),
                     if (!Responsive.isMobile(context))
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text("Angelina Jolie"),
-                      ),
+                      FutureBuilder<User?>(
+                          future: context.read<UserController>().returnUser,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null && !snapshot.hasData)
+                              return Container();
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(snapshot.data!.name),
+                            );
+                          }),
                   ],
                 )),
             DropdownMenuItem(

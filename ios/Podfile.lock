@@ -49,7 +49,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
-  Flutter: 405776dd0763d7e32a8f989d4e271ca1317d080c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   network_info_plus: b78876159360f5580608c2cea620d6ceffabd0ad
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02

@@ -1,6 +1,8 @@
+import 'package:admin/controllers/DashboardParamsController.dart';
 import 'package:admin/models/MyFiles.dart';
 import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import 'file_info_card.dart';
@@ -17,28 +19,6 @@ class MyFiles extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "",
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              ElevatedButton.icon(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 1.5,
-                    vertical:
-                        defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                  ),
-                ),
-                onPressed: () {},
-                icon: Icon(Icons.add),
-                label: Text("Add New"),
-              ),
-            ],
-          ),
-          SizedBox(height: defaultPadding),
           Responsive(
             mobile: FileInfoCardGridView(
               crossAxisCount: _size.width < 650 ? 2 : 4,
@@ -78,7 +58,48 @@ class FileInfoCardGridView extends StatelessWidget {
         mainAxisSpacing: defaultPadding,
         childAspectRatio: childAspectRatio,
       ),
-      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index]),
+      itemBuilder: (context, index) => StreamBuilder(
+          stream: demoMyFiles[index].type == "voltage"
+              ? Provider.of<DashbaordParamsController>(context).voltageStream()
+              : demoMyFiles[index].type == "current"
+                  ? Provider.of<DashbaordParamsController>(context)
+                      .currentStream()
+                  : demoMyFiles[index].type == "energy"
+                      ? Provider.of<DashbaordParamsController>(context)
+                          .energyStream()
+                      : demoMyFiles[index].type == "power"
+                          ? Provider.of<DashbaordParamsController>(context)
+                              .powerStream()
+                          : Provider.of<DashbaordParamsController>(context)
+                              .amountStream(),
+          builder: (context, snapshot) {
+            if (snapshot.data == null && !snapshot.hasData) {
+              return SizedBox(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+            Map<String, dynamic> data = snapshot.data as Map<String, dynamic>;
+            if (demoMyFiles[index].type == "voltage") {
+              demoMyFiles[index].numOfFiles =
+                  double.parse(data['avg'].toString());
+            } else if (demoMyFiles[index].type == "current") {
+              demoMyFiles[index].numOfFiles =
+                  double.parse(data['avg'].toString());
+            } else if (demoMyFiles[index].type == "energy") {
+              demoMyFiles[index].numOfFiles =
+                  double.parse(data['avg'].toString());
+            } else if (demoMyFiles[index].type == "power") {
+              print("Power" + snapshot.data.toString());
+              demoMyFiles[index].numOfFiles = double.parse(data['avg']);
+            } else {
+              demoMyFiles[index].numOfFiles =
+                  double.parse(data['avg'].toString());
+            }
+
+            return FileInfoCard(info: demoMyFiles[index]);
+          }),
     );
   }
 }
