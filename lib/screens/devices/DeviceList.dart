@@ -66,9 +66,9 @@ class _DeviceListState extends State<DeviceList> {
                     }
                     List devices = snapshot.data![1]
                         .map((device) => RecentFile(
-                              date: DateTime.now().toIso8601String(),
-                              title: device.name,
-                            ))
+                            date: DateTime.now().toIso8601String(),
+                            title: device.name,
+                            uid: device.uid))
                         .toList();
                     return DataTable2(
                       columnSpacing: defaultPadding,

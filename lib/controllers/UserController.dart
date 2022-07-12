@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:developer';
 
 import 'package:admin/constants.dart';
 import 'package:admin/models/User.dart';
@@ -33,6 +33,7 @@ class UserController with ChangeNotifier {
 
   Future<User> getUser(BuildContext context) async {
     try {
+      log("Called");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
           await Dio().get(baseUrl + 'user_data/${prefs.getString("uid")}');
@@ -42,27 +43,20 @@ class UserController with ChangeNotifier {
       await prefs.setString('user', jsonEncode(userJson));
       notifyListeners();
       error = false;
-
+      if (response.data['name'] == null) {
+        error = true;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(response.data['msg'])));
+      }
       return User(
           email: userJson['email'],
           name: userJson['f_name'],
           phone: userJson['phone'],
           uid: userJson['id']);
-    } on SocketException catch (e) {
-      debugPrint("User fetch error: $e");
-      errorWidget(context);
-      error = true;
-
-      rethrow;
-    } on DioError catch (e) {
-      debugPrint("User fetch error(Dio error): $e");
-      errorWidget(context);
-      error = true;
-
-      throw Error();
     } catch (e) {
-      debugPrint("User fetch error: $e");
-      errorWidget(context);
+      log("User fetch error: $e");
+      debugPrint(e.toString());
+      // errorWidget(context);
       error = true;
       throw Exception(e);
     }

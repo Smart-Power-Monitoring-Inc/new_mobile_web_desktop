@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("uid");
       if (token != null) {
-        Navigator.restorablePushReplacementNamed(context, "/");
+        Navigator.pushReplacementNamed(context, "/");
       }
     });
   }

@@ -9,6 +9,7 @@ class DashbaordParamsController with ChangeNotifier {
   Stream voltageStream() async* {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
+
       Response response = await Dio()
           .get(baseUrl + "summary/${prefs.getString('uid')}/voltage");
 

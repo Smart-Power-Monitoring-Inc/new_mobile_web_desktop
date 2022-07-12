@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,21 @@ class DeviceController with ChangeNotifier {
     };
     prefs.setString("selectedDevice",
         jsonEncode(deviceMap)); // save the selected device in memory
+  }
+
+  Future toggleDevice(String uid) async {
+    // Make a post request to backend update device status
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      Response response = await Dio()
+          .post("$baseUrl/device_search/${prefs.getString("uid")}/$uid");
+
+      return response.data;
+    } catch (e) {
+      log(e.toString());
+      throw Exception(e);
+    }
   }
 }
 

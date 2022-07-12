@@ -23,7 +23,7 @@ class AuthController extends ChangeNotifier {
       Response response = await Dio().post(baseUrl + "new/create/",
           data: jsonEncode({
             "f_name": name,
-            "phone": countryCode + phone,
+            "phone": phone,
             "password": pin,
             "country_code": countryCode
           }));

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../responsive.dart';
 
 class RecentFiles extends StatefulWidget {
   const RecentFiles({
@@ -78,20 +79,23 @@ class _RecentFilesState extends State<RecentFiles> {
 
                     List devices = [];
                     List<RecentFile> _devices = [];
-                    if (data!['result'].containsKey("devices")) {
-                      devices = data['result']['devices'];
-                      _devices = devices
-                          .map(
-                            (e) => RecentFile(
-                                online: e['state'],
-                                date: DateFormat.yMMM()
-                                    .add_Hms()
-                                    .format(DateTime.now()),
-                                size: "",
-                                icon: "assets/icons/xd_file.svg",
-                                title: e['device_name']),
-                          )
-                          .toList();
+                    if (data!['result'] != null) {
+                      if (data['result'].containsKey("devices")) {
+                        devices = data['result']['devices'];
+                        _devices = devices
+                            .map(
+                              (e) => RecentFile(
+                                  online: e['state'],
+                                  uid: e['uid'],
+                                  date: DateFormat.yMMM()
+                                      .add_Hms()
+                                      .format(DateTime.now()),
+                                  size: "",
+                                  icon: "assets/icons/xd_file.svg",
+                                  title: e['device_name']),
+                            )
+                            .toList();
+                      }
                     }
                     return devices.isEmpty
                         ? Center(
@@ -107,7 +111,9 @@ class _RecentFilesState extends State<RecentFiles> {
                           )
                         : DataTable2(
                             columnSpacing: defaultPadding,
-                            minWidth: MediaQuery.of(context).size.width,
+                            minWidth: !Responsive.isMobile(context)
+                                ? MediaQuery.of(context).size.width * .65
+                                : MediaQuery.of(context).size.width / 2,
                             columns: [
                               DataColumn(
                                 label: Text("Device"),
@@ -158,13 +164,29 @@ DataRow recentFileDataRow(RecentFile fileInfo, BuildContext context) {
         ),
       ),
       DataCell(Text(fileInfo.date!)),
-      DataCell(Card(
-          color: fileInfo.online ? Colors.green : Colors.red,
-          shape: StadiumBorder(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-            child: Text(fileInfo.online ? "On" : "Off"),
-          ))),
+      DataCell(ElevatedButton(
+        onPressed: () async {
+          // Function to toggle device on/off
+          var response =
+              await Provider.of<DeviceController>(context, listen: false)
+                  .toggleDevice(fileInfo.uid as String);
+
+          print(response);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: fileInfo.online ? Colors.green : Colors.red,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+          child: Text(
+            fileInfo.online ? "On" : "Off",
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+      )),
     ],
   );
 }
