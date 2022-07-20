@@ -86,7 +86,7 @@ class _RecentFilesState extends State<RecentFiles> {
                             .map(
                               (e) => RecentFile(
                                   online: e['state'],
-                                  uid: e['uid'],
+                                  uid: e['device_uid'],
                                   date: DateFormat.yMMM()
                                       .add_Hms()
                                       .format(DateTime.now()),

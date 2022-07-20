@@ -42,9 +42,9 @@ class _DeviceListState extends State<DeviceList> {
               width: 800,
               height: 300,
               child: FutureBuilder<List>(
-                  future: context.read<DeviceController>().getDeviceData,
+                  future: context.watch<DeviceController>().getDeviceData,
                   builder: (context, snapshot) {
-                    print(snapshot.data);
+                    // print(snapshot.data);
                     if (snapshot.data == null && !snapshot.hasData) {
                       return CircularProgressIndicator.adaptive();
                     }
@@ -68,6 +68,7 @@ class _DeviceListState extends State<DeviceList> {
                         .map((device) => RecentFile(
                             date: DateTime.now().toIso8601String(),
                             title: device.name,
+                            online: device.active,
                             uid: device.uid))
                         .toList();
                     return DataTable2(
@@ -138,7 +139,16 @@ DataRow recentFileDataRow(RecentFile fileInfo, context) {
       DataCell(Text(DateFormat.yMMMEd()
           .add_Hm()
           .format(DateTime.parse(fileInfo.date.toString())))),
-      DataCell(Text(fileInfo.size ?? "0")),
+      DataCell(MaterialButton(
+          onPressed: () {},
+          color: fileInfo.online ? Colors.green : Colors.red,
+          child: Text(
+            fileInfo.online ? 'On' : 'Off',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(color: white, fontWeight: FontWeight.bold),
+          ))),
       DataCell(Text("15 kWH")),
       DataCell(Text("GH¢ 2.14")),
       DataCell(InkWell(

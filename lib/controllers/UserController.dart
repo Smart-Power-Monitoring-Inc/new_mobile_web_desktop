@@ -55,7 +55,7 @@ class UserController with ChangeNotifier {
           uid: userJson['id']);
     } catch (e) {
       log("User fetch error: $e");
-      debugPrint(e.toString());
+      // debugPrint(e.toString());
       // errorWidget(context);
       error = true;
       throw Exception(e);

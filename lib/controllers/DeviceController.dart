@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
@@ -14,34 +15,54 @@ class DeviceController with ChangeNotifier {
   }
 
   Future<List> get getDeviceData async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Response response =
-        await Dio().get(baseUrl + 'device_search/${prefs.getString("uid")}');
-
-    print("Device data:  " + response.data['result']['devices'].toString());
-    if (response.data['result']['devices'].isNotEmpty) {
-      return [
-        true,
-        response.data['result']['devices']
-            .map((device) => Device(
-                name: device['device_name'],
-                uid: device['device_uid'],
-                currentrating: 0,
-                readings: []))
-            .toList()
-      ];
-    } else {
+      Response response =
+          await Dio().get(baseUrl + 'device_search/${prefs.getString("uid")}');
+      // print(response.data);
+      // print("Device data:  " + response.data['result'].toString());
+      if (response.data['result'].isNotEmpty) {
+        return [
+          true,
+          response.data['result']
+              .map((device) => Device(
+                      name: device['device_name'] ?? "",
+                      uid: device['device_uid'] ?? "",
+                      active: device['state'],
+                      currentrating: double.parse(
+                          device['readings'].last['reading'].toString()),
+                      readings: <DeviceReading>[
+                        ...device['readings']
+                            .map((e) => DeviceReading(
+                                time: DateTime.parse(e['timestamp']),
+                                value: double.parse(e['reading'].toString())))
+                            .toList()
+                      ]))
+              .toList()
+        ];
+      } else {
+        return [false, []];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
       return [false, []];
     }
   }
 
+  void initTimer() {
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      notifyListeners();
+    });
+  }
+
   Stream<Map<String, dynamic>> getOnlineDevices(bool online) async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("uid") ?? "";
 
-    Response response = await Dio().get(
-        baseUrl + 'device_search/${prefs.getString("uid")}/g?online=$online');
-
+    Response response =
+        await Dio().get(baseUrl + 'device_search/$uid/g?online=$online');
+    // debugPrint("Device status request: ${response.data}");
     yield response.data as Map<String, dynamic>;
   }
 
@@ -73,15 +94,14 @@ class DeviceController with ChangeNotifier {
 
   Future toggleDevice(String uid) async {
     // Make a post request to backend update device status
+    debugPrint(uid);
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      Response response = await Dio()
-          .post("$baseUrl/device_search/${prefs.getString("uid")}/$uid");
-
+      Response response =
+          await Dio().post("$routerUrl/toggle", data: {"uid": uid});
+      print(response.headers);
       return response.data;
     } catch (e) {
-      log(e.toString());
+      log("Toggle response: $e");
       throw Exception(e);
     }
   }

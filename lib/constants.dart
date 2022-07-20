@@ -9,4 +9,5 @@ const grey = Colors.grey;
 Color? lightGrey = Colors.grey[300];
 const black = Colors.black;
 const blue = Colors.blue;
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "http://127.0.0.1:3000/";
+const routerUrl = "http://10.192.18.1:80/";
