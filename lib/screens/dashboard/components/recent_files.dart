@@ -155,7 +155,7 @@ DataRow recentFileDataRow(RecentFile fileInfo, BuildContext context) {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
                 child: Text(
-                  fileInfo.title!,
+                  fileInfo.title ?? "error",
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -167,11 +167,8 @@ DataRow recentFileDataRow(RecentFile fileInfo, BuildContext context) {
       DataCell(ElevatedButton(
         onPressed: () async {
           // Function to toggle device on/off
-          var response =
-              await Provider.of<DeviceController>(context, listen: false)
-                  .toggleDevice(fileInfo.uid as String);
-
-          print(response);
+          await Provider.of<DeviceController>(context, listen: false)
+              .toggleDevice(fileInfo.uid as String);
         },
         style: ElevatedButton.styleFrom(
           primary: fileInfo.online ? Colors.green : Colors.red,

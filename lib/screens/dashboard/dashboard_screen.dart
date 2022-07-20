@@ -1,3 +1,4 @@
+import 'package:admin/controllers/DashboardParamsController.dart';
 import 'package:admin/controllers/PageController.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/components/my_fields.dart';
@@ -19,6 +20,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<DashbaordParamsController>().init();
   }
 
   @override
@@ -32,7 +34,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData && snapshot.data != null)
                     return Container();
-                  print(snapshot.data);
                   if (snapshot.data == 2) return Container();
                   return Header();
                 }),

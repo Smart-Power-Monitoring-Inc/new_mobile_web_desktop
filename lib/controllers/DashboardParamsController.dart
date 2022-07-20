@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:admin/constants.dart';
@@ -6,13 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashbaordParamsController with ChangeNotifier {
+  void init() {
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      notifyListeners();
+    });
+  }
+
   Stream voltageStream() async* {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      Response response =
-          await Dio().get(baseUrl + "${prefs.getString('uid')}/voltage");
-      debugPrint("Voltage: ${response.data}");
+      Response response = await Dio()
+          .get(baseUrl + "summary/${prefs.getString('uid')}/voltage");
+      // debugPrint("Voltage: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());
@@ -25,7 +32,7 @@ class DashbaordParamsController with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response = await Dio()
           .get(baseUrl + "summary/${prefs.getString('uid')}/current");
-      debugPrint("Current: ${response.data}");
+      // debugPrint("Current: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());
@@ -38,7 +45,7 @@ class DashbaordParamsController with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response = await Dio().get(baseUrl +
           "summary/${prefs.getString('uid')}/energy"); // Remember to fix this
-      debugPrint("Energy: ${response.data}");
+      // debugPrint("Energy: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());
@@ -51,7 +58,7 @@ class DashbaordParamsController with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
           await Dio().get(baseUrl + "summary/${prefs.getString('uid')}/energy");
-      debugPrint("Energy: ${response.data}");
+      // debugPrint("Energy: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());
@@ -64,7 +71,7 @@ class DashbaordParamsController with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
           await Dio().get(baseUrl + "summary/${prefs.getString('uid')}/power");
-      debugPrint("Power: ${response.data}");
+      // debugPrint("Power: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());

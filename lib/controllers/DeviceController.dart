@@ -58,12 +58,16 @@ class DeviceController with ChangeNotifier {
 
   Stream<Map<String, dynamic>> getOnlineDevices(bool online) async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String uid = prefs.getString("uid") ?? "";
+    try {
+      String uid = prefs.getString("uid") ?? "";
 
-    Response response =
-        await Dio().get(baseUrl + 'device_search/$uid/g?online=$online');
-    // debugPrint("Device status request: ${response.data}");
-    yield response.data as Map<String, dynamic>;
+      Response response =
+          await Dio().get(baseUrl + 'device_search/$uid/g?online=$online');
+      // debugPrint("Device status request: ${response.data}");
+      yield response.data as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint("an error occured: $e");
+    }
   }
 
   Future<Device> getSelectdDevice(int index) async {
@@ -94,11 +98,10 @@ class DeviceController with ChangeNotifier {
 
   Future toggleDevice(String uid) async {
     // Make a post request to backend update device status
-    debugPrint(uid);
+
     try {
       Response response =
-          await Dio().post("$routerUrl/toggle", data: {"uid": uid});
-      print(response.headers);
+          await Dio().post("${routerUrl}toogle", data: {"uid": uid});
       return response.data;
     } catch (e) {
       log("Toggle response: $e");

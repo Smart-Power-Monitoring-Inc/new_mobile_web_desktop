@@ -33,11 +33,10 @@ class UserController with ChangeNotifier {
 
   Future<User> getUser(BuildContext context) async {
     try {
-      log("Called");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
           await Dio().get(baseUrl + 'user_data/${prefs.getString("uid")}');
-      debugPrint(response.data.toString());
+      // debugPrint(response.data.toString());
       // String? user = prefs.getString('user');
       Map<String, dynamic> userJson = response.data['userDetails'];
       await prefs.setString('user', jsonEncode(userJson));
