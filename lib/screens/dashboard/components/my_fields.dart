@@ -91,8 +91,8 @@ class FileInfoCardGridView extends StatelessWidget {
               demoMyFiles[index].numOfFiles =
                   double.parse(data['avg'].toString());
             } else if (demoMyFiles[index].type == "power") {
-              print("Power" + snapshot.data.toString());
-              demoMyFiles[index].numOfFiles = double.parse(data['avg']);
+              demoMyFiles[index].numOfFiles =
+                  double.parse(data['avg'].toString());
             } else {
               demoMyFiles[index].numOfFiles =
                   double.parse(data['avg'].toString());

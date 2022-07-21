@@ -58,7 +58,7 @@ class DashbaordParamsController with ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       Response response =
           await Dio().get(baseUrl + "summary/${prefs.getString('uid')}/energy");
-      // debugPrint("Energy: ${response.data}");
+      debugPrint("Energy: ${response.data}");
       yield response.data;
     } catch (e) {
       log(e.toString());

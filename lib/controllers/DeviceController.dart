@@ -20,8 +20,7 @@ class DeviceController with ChangeNotifier {
 
       Response response =
           await Dio().get(baseUrl + 'device_search/${prefs.getString("uid")}');
-      // print(response.data);
-      // print("Device data:  " + response.data['result'].toString());
+
       if (response.data['result'].isNotEmpty) {
         return [
           true,
@@ -98,10 +97,11 @@ class DeviceController with ChangeNotifier {
 
   Future toggleDevice(String uid) async {
     // Make a post request to backend update device status
-
     try {
       Response response =
           await Dio().post("${routerUrl}toogle", data: {"uid": uid});
+      print(uid);
+      print(response.data);
       return response.data;
     } catch (e) {
       log("Toggle response: $e");

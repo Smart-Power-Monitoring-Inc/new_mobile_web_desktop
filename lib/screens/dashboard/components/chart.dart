@@ -1,5 +1,7 @@
+import 'package:admin/controllers/DashboardParamsController.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
@@ -22,27 +24,34 @@ class Chart extends StatelessWidget {
               sections: paiChartSelectionDatas,
             ),
           ),
-          Positioned.fill(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: defaultPadding),
-                Text(
-                  "29.1",
-                  style: Theme.of(context).textTheme.headline4!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        height: 0.5,
+          StreamBuilder(
+              stream: context.watch<DashbaordParamsController>().energyStream(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null && !snapshot.hasData) return Center();
+                Map<String, dynamic> data =
+                    snapshot.data as Map<String, dynamic>;
+                return Positioned.fill(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: defaultPadding),
+                      Text(
+                        double.parse(data['avg'].toString()).toStringAsFixed(2),
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              height: 0.5,
+                            ),
                       ),
-                ),
-                Text("of 128kwh",
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1!
-                        .copyWith(color: Colors.white))
-              ],
-            ),
-          ),
+                      Text("of 128kwh",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.white))
+                    ],
+                  ),
+                );
+              }),
         ],
       ),
     );

@@ -54,6 +54,15 @@ List<CloudStorageInfo> demoMyFiles = [
       voltage: true,
       type: "voltage"),
   CloudStorageInfo(
+      title: "Power",
+      numOfFiles: 1328.0,
+      svgSrc: Img.get("high-voltage.png"),
+      totalStorage: "kW (Kilowatts)",
+      color: Color(0xFFA4CDFF),
+      percentage: 10,
+      voltage: true,
+      type: "power"),
+  CloudStorageInfo(
       title: "Current",
       numOfFiles: 5328.0,
       svgSrc: Img.get("electric-current.png"),
