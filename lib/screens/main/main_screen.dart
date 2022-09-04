@@ -1,6 +1,5 @@
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/PageController.dart';
-import 'package:admin/controllers/UserController.dart';
 import 'package:admin/responsive.dart';
 import 'package:admin/screens/dashboard/dashboard_screen.dart';
 import 'package:admin/screens/devices/ManageDevices.dart';
@@ -9,6 +8,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/DeviceController.dart';
+import '../../controllers/UserController.dart';
 import 'components/side_menu.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,6 +18,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late TextEditingController controllerText;
+  late Future user;
   void showWelcomeNote(String name) {
     CoolAlert.show(
         context: context,
@@ -33,8 +34,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     controllerText = TextEditingController();
     super.initState();
+    user = context.read<UserController>().getUser(context);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // User user = await context.read<UserController>().getUser();
       // Future.delayed(Duration(seconds: 1), () => showWelcomeNote(user.name));
       Provider.of<DeviceController>(context, listen: false).initTimer();
     });
@@ -44,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: context.read<UserController>().getUser(context),
+        future: user,
         builder: (context, snapshot) {
           return Scaffold(
             drawer: SideMenu(),

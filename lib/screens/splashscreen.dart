@@ -20,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("uid");
+      print(token == null);
       if (token != null) {
         Navigator.pushReplacementNamed(context, "/");
       }
@@ -28,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("This page is called");
     return AnimatedSplashScreen(
       backgroundColor: secondaryColor,
       nextScreen: Authentication(),

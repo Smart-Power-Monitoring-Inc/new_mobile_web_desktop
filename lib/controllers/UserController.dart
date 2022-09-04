@@ -40,15 +40,18 @@ class UserController with ChangeNotifier {
           await Dio().get(baseUrl + 'user_data/${prefs.getString("uid")}');
       // debugPrint(response.data.toString());
       // String? user = prefs.getString('user');
-      Map<String, dynamic> userJson = response.data['userDetails'];
+      Map<String, dynamic> userJson = response.data['userDetails'] ?? {};
       await prefs.setString('user', jsonEncode(userJson));
       notifyListeners();
       error = false;
-      if (response.data['name'] == null) {
+      if (response.data == null) {
         error = true;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(response.data['msg'])));
       }
+      print("REsponse: " + response.data.toString());
+      if (response.data['msg'] == "Invalid User Credentials")
+        return User(email: '', name: '', phone: '', uid: '');
       return User(
           email: userJson['email'],
           name: userJson['f_name'],
