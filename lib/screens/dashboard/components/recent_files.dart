@@ -3,7 +3,6 @@ import 'package:admin/models/RecentFile.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
@@ -87,9 +86,8 @@ class _RecentFilesState extends State<RecentFiles> {
                               (e) => RecentFile(
                                   online: e['state'],
                                   uid: e['device_uid'],
-                                  date: DateFormat.yMMM()
-                                      .add_Hms()
-                                      .format(DateTime.now()),
+                                  date: e['readings'][e['readings'].lenght - 1]
+                                      ['timestamp'],
                                   size: "",
                                   icon: "assets/icons/xd_file.svg",
                                   title: e['device_name']),
